@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visualization of Arithmatic Compiler</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./parser.css" />
+  </head>
+  <body>
+    <div class="inp-container">
+      <input value="3+5" id="expression" type="text" />
+      <button id="expButton">Compile</button>
+    </div>
+    <div class="lex-container">
+      <div class="lexer">
+        <!-- <div class="lex-left">
+        <h2>Tokens</h2>
+        <div class="token-container">
+          <ul>
+            <li>
+              <div class="token">
+                <span class="token-element">3</span>
+                <span class="token-type">NUM</span>
+              </div>
+            </li>
+            <li>
+              <div class="token">
+                <span class="token-element">+</span>
+                <span class="token-type">PLUS</span>
+              </div>
+            </li>
+            <li>
+              <div class="token">
+                <span class="token-element">5</span>
+                <span class="token-type">NUM</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="lex-right">
+        <h2>input : 3 + 5</h2>
+        <div class="token">
+          <span class="token-element">3</span>
+          <span class="token-type">NUM</span>
+        </div>
+      </div>
+       -->
+      </div>
+      <div class="lex-result"></div>
+    </div>
+    <div class="parse-container">
+      <!-- <div class="parser">
+        <div class="before-stack-container stack-container block">
+          <h3>
+            stack <br />
+            before
+          </h3>
+          <ul class="stack before-stack">
+            <li>$</li>
+            <li>E</li>
+          </ul>
+        </div>
+        <div class="actions block">
+          <h3>Look Aheads</h3>
+          <div class="token anim">
+            <span class="token-element">3</span>
+            <span class="token-type">NUM</span>
+          </div>
+          <h4>Stack Operation:</h4>
+          <div class="par-action">
+            <p>pop()</p>
+            <p>push(E')</p>
+            <p>push(T)</p>
+          </div>
+        </div>
+        <div class="current-stack-container stack-container block">
+          <h3>
+            current <br />
+            stack
+          </h3>
+          <ul class="stack current-stack">
+            <li>$</li>
+            <li>E'</li>
+            <li>T</li>
+          </ul>
+        </div>
+        <div class="diagram block"></div>
+      </div> -->
+    </div>
+    <div class="scroll-div"></div>
+    <script src="./lexer.js"></script>
+    <script src="./parser.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
