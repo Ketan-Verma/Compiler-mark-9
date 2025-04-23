@@ -1,5 +1,5 @@
-const TEMP_PARSE_SPEED = 500;
-const PARSE_SPEED = 500;
+const TEMP_PARSE_SPEED = 5;
+const PARSE_SPEED = 5;
 
 // Grammar rules representation
 const GRAMMAR = {
@@ -93,7 +93,6 @@ async function visualizeParseStep(
         <br><span class="debug-label">Look Ahead:</span> ${getAbbreviatedSymbol(
           lookAhead.value
         )}
-        
         <br><span class="debug-label">Action:</span> ${description}
         <br><span class="debug-label">Stack after Action:</span> ${stack
           .map(getAbbreviatedSymbol)
@@ -293,7 +292,7 @@ async function parse(tokens) {
   // await sleep(CLOCK_SPEED);
   // console.log("show tokens");
 
-  action_div.innerHTML = `<h3>Initialization</h3>
+  action_div.innerHTML = `<h3 class="step-count">Step: ${stepNumber++}</h3><h3>Initialization</h3>
   <h4>Stack Operation:</h4>
   <div class="par-action">
   <p>push $ and E to stack</p>
@@ -411,6 +410,7 @@ async function parse(tokens) {
           </ul>`;
         await sleep(TEMP_PARSE_SPEED);
         temp_action_div.innerHTML = `
+          <h3 class="step-count">Step: ${stepNumber - 1}</h3>
             <h4 class="green-clr">Parsing Done Successfully</h4>
             <div class="par-action">
               
@@ -435,6 +435,7 @@ async function parse(tokens) {
         //
         await sleep(TEMP_PARSE_SPEED);
         temp_action_div.innerHTML = `
+        <h3 class="step-count">Step: ${stepNumber}</h3>
           <h4>Stack Operation:</h4>
           <div class="par-action">
             <p>top element of stack is &epsilon;.</p>
@@ -477,6 +478,7 @@ async function parse(tokens) {
 
           // await sleep(TEMP_PARSE_SPEED);
           temp_action_div.innerHTML = `
+          <h3 class="step-count">Step: ${stepNumber}</h3>
           <h4>Stack Operation:</h4>
           <div class="par-action">
             <p>Stack top is terminal so we perform pop operation</p>
@@ -552,6 +554,7 @@ async function parse(tokens) {
 
           // await sleep(TEMP_PARSE_SPEED);
           temp_action_div.innerHTML = `
+          <h3 class="step-count">Step: ${stepNumber}</h3>
           <h4>Stack Operation:</h4>
           <div class="par-action">
             <p>Stack top is non-terminal so we pop it</p>
@@ -573,6 +576,7 @@ async function parse(tokens) {
             just_a_temp.push(production[i]);
             parseTreeStack.push(newNodes[i]);
             temp_action_div.innerHTML = `
+            <h3 class="step-count">Step: ${stepNumber}</h3>
           <h4>Stack Operation:</h4>
           <div class="par-action">
             <p>Stack top is non-terminal so we pop it</p>

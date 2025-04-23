@@ -1,4 +1,4 @@
-const CLOCK_SPEED = 500; // 250ms between operations
+const CLOCK_SPEED = 5; // 250ms between operations
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -33,14 +33,20 @@ look at next if none
 exit
 */
 const lexerDiv = document.querySelector(".lexer"); // or use document.getElementById('lexer')
+const lexStartMessage = document.createElement("div");
 const lexLeftDiv = document.createElement("div");
+const sublexLeftDiv = document.createElement("div");
+
 const lexRightDiv = document.createElement("div");
 const lexResultDiv = document.querySelector(".lex-result");
+
 function ADD_LEX_DIV() {
   // Get the existing lexer div by ID or class
 
   // Create the lex-left div
   lexLeftDiv.classList.add("lex-left");
+  // sublexLeftDiv.classList.add("lex-left");
+  sublexLeftDiv.classList.add("sub-lex-left");
 
   // Create the lex-right div
   lexRightDiv.classList.add("lex-right");
@@ -49,14 +55,22 @@ function ADD_LEX_DIV() {
   lexerDiv.appendChild(lexLeftDiv);
   lexerDiv.appendChild(lexRightDiv);
   document.querySelector(".lex-result").innerHTML = ``;
+  lexLeftDiv.appendChild(sublexLeftDiv);
+  lexerDiv.appendChild(lexStartMessage);
 }
 
 async function lexer(input) {
+  // lexerDiv.style.height = "100vh"; // Set height to auto to allow for dynamic content
+
   console.log(`input : ${input}`);
   ADD_LEX_DIV();
-
+  lexStartMessage.innerHTML = `<h2 class="main-message">Lexical Analysis</h2>`;
   lexRightDiv.innerHTML = `<h2>input : ${input}</h2>`;
   lexLeftDiv.innerHTML = `<h2>Tokens</h2>`;
+  lexLeftDiv.appendChild(sublexLeftDiv);
+
+  sublexLeftDiv.innerHTML = ``;
+
   let tokens = [];
   let i = 0;
 
@@ -114,7 +128,7 @@ async function lexer(input) {
       //console.log(`Tokenized: ${newToken.type} -> "${newToken.value}"`);
       await sleep(CLOCK_SPEED);
       lexRightDiv.innerHTML = `<h2>input : ${input}</h2>`;
-      lexLeftDiv.innerHTML += `<div class="token anim">
+      sublexLeftDiv.innerHTML += `<div class="token anim">
       <span class="token-element">${newToken.value}</span>
       <span class="token-type">${newToken.type.substring(0, 3)}</span>
       </div>`;
@@ -138,7 +152,7 @@ async function lexer(input) {
 
   await sleep(CLOCK_SPEED);
   lexRightDiv.innerHTML = `<h2>input : ${input}</h2>`;
-  lexLeftDiv.innerHTML += `<div class="token anim">
+  sublexLeftDiv.innerHTML += `<div class="token anim">
   <span class="token-element">$</span>
   <span class="token-type">EoF</span>
   </div>`;

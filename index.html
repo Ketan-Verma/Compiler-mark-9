@@ -8,10 +8,48 @@
     <link rel="stylesheet" href="./parser.css" />
   </head>
   <body>
-    <div class="inp-container">
-      <input value="3+5" id="expression" type="text" />
-      <button id="expButton">Compile</button>
-    </div>
+    <style>
+      .intro {
+        /* background-color: brown; */
+        padding: 1em;
+        max-width: 1080px;
+        margin: 0 auto;
+        font-weight: 600;
+        font-size: larger;
+      }
+    </style>
+    <main>
+      <nav>
+        <h3>Compiler Visualizer</h3>
+        <ul class="nav-list">
+          <li><a href="./home.html">Home</a></li>
+          <li><a href="./index.html">Compiler</a></li>
+          <!-- <li><a href="./parser.html">Parser</a></li> -->
+          <li><a href="./about.html">About</a></li>
+        </ul>
+      </nav>
+      <header class="intro">
+        <!-- <h1>Visual Compiler for Arithmetic Expressions</h1> -->
+
+        <p>
+          Enter an arithmetic expression like <code>3 + 5 *2</code> and watch
+          how the compiler tokenizes and parses it step by step.
+        </p>
+      </header>
+      <div class="inp-container">
+        <input value="3+5*2" id="expression" type="text" />
+        <button id="expButton">Compile</button>
+      </div>
+      <div id="picture">
+        <img
+          id="working-image"
+          src="./working of compiler.svg"
+          alt=""
+          srcset=""
+        />
+      </div>
+    </main>
+
     <div class="lex-container">
       <div class="lexer">
         <!-- <div class="lex-left">
@@ -89,6 +127,8 @@
         <div class="diagram block"></div>
       </div> -->
     </div>
+
+    <script src="./lib/d3.v7.min.js"></script>
     <div class="scroll-div"></div>
     <script src="./lexer.js"></script>
     <script src="./parser.js"></script>
