@@ -1,5 +1,5 @@
-const TEMP_PARSE_SPEED = 5;
-const PARSE_SPEED = 5;
+const TEMP_PARSE_SPEED = 1;
+const PARSE_SPEED = 1;
 
 // Grammar rules representation
 const GRAMMAR = {
@@ -66,6 +66,7 @@ async function visualizeParseStep(
   isLastStep = false,
   isError = false
 ) {
+  return true; // Temporarily return true to avoid errors
   const timestamp = new Date().toISOString().split("T")[1].slice(0, -1);
   const parseOutput = document.querySelector(".parse-process");
   const row = document.createElement("div");
@@ -159,8 +160,8 @@ function drawParseTree(parseTree, canvasId) {
         .y((d) => d.y)
     )
     .attr("fill", "none")
-    .attr("stroke", "#569cd6")
-    .attr("stroke-width", 1.5)
+    .attr("stroke", "#333333") // set color to match node stroke
+    .attr("stroke-width", 2.5)
     .attr("opacity", 0)
     .transition()
     .duration(500)
@@ -179,9 +180,9 @@ function drawParseTree(parseTree, canvasId) {
   nodes
     .append("circle")
     .attr("r", 20)
-    .attr("fill", "#2d2d2d")
-    .attr("stroke", "#569cd6")
-    .attr("stroke-width", 1.5)
+    .attr("fill", "#90D5ff")
+    .attr("stroke", "#333333") // set color to match link stroke
+    .attr("stroke-width", 3)
     .attr("opacity", 0)
     .transition()
     .duration(500)
@@ -192,9 +193,10 @@ function drawParseTree(parseTree, canvasId) {
     .append("text")
     .attr("dy", "0.35em")
     .attr("text-anchor", "middle")
-    .attr("fill", "#d4d4d4")
+    .attr("fill", "#00072d")
     .style("font-family", "Consolas")
-    .style("font-size", "14px")
+    .style("font-size", "18px")
+    .style("font-weight", "bold")
     .text((d) => getAbbreviatedSymbol(d.data.symbol))
     .attr("opacity", 0)
     .transition()
@@ -202,23 +204,22 @@ function drawParseTree(parseTree, canvasId) {
     .attr("opacity", 1);
 
   // Add hover effects
-  nodes
-    .on("mouseover", function () {
-      d3.select(this)
-        .select("circle")
-        .transition()
-        .duration(200)
-        .attr("r", 25)
-        .attr("fill", "#3c3c3c");
-    })
-    .on("mouseout", function () {
-      d3.select(this)
-        .select("circle")
-        .transition()
-        .duration(200)
-        .attr("r", 20)
-        .attr("fill", "#2d2d2d");
-    });
+  // nodes.on("mouseover", function () {
+  //   d3.select(this)
+  //     .select("circle")
+  //     .transition()
+  //     .duration(200)
+  //     .attr("r", 25)
+  //     .attr("fill", "#3c3c3c");
+  // });
+  // .on("mouseout", function () {
+  //   d3.select(this)
+  //     .select("circle")
+  //     .transition()
+  //     .duration(200)
+  //     .attr("r", 20)
+  //     .attr("fill", "#2d2d2d");
+  // });
 }
 
 // Remove these functions as they're no longer needed
@@ -309,7 +310,12 @@ async function parse(tokens) {
   <li>$</li>
   <li>E</li>
   </ul>`;
-
+  diagram_div.innerHTML = `<h3>Parse Tree for step ${
+    stepNumber - 1
+  }</h3><canvas id="newparseTreeCanvas${
+    stepNumber - 1
+  }" width="400" height="300"></canvas>`;
+  drawParseTree(parseTreeRoot, `newparseTreeCanvas${stepNumber - 1}`);
   console.log("initialize stack, push $ and E");
   document
     .querySelector(".scroll-div")
@@ -387,7 +393,7 @@ async function parse(tokens) {
 
       if (top === "$" && currentSymbol.type === "EOF") {
         description = "Success! Both stack top and input are $";
-        /*await visualizeParseStep(
+        await visualizeParseStep(
           stepNumber++,
           stack,
           top,
@@ -396,10 +402,9 @@ async function parse(tokens) {
           parseTreeRoot,
           true,
           false
-        );
-        /**/
+        ); /**/
         await sleep(TEMP_PARSE_SPEED);
-        console.log(stepNumber++, stack, top, currentSymbol, description);
+        // console.log(stepNumber++, stack, top, currentSymbol, description);
 
         temp_current_stack_div.innerHTML = `<h3>
             stack <br />
@@ -416,6 +421,11 @@ async function parse(tokens) {
               
               
             </div>`;
+        temp_diagram_div.innerHTML = `<h3>Parse Tree for step ${
+          stepNumber - 1
+        }</h3><canvas id="newparseTreeCanvas${stepNumber}" width="400" height="300"></canvas>`;
+        drawParseTree(parseTreeRoot, `newparseTreeCanvas${stepNumber}`);
+
         let temp_div = document.createElement("div");
         temp_div.classList.add("parse-result");
         temp_div.innerHTML = ` <div class="lex-success success result anim">
@@ -443,11 +453,12 @@ async function parse(tokens) {
             <p><span id="red-clr"> pop()</span></p>
             
           </div>`;
+        temp_diagram_div.innerHTML = `<h3>Parse Tree for step ${stepNumber}</h3><canvas id="newparseTreeCanvas${stepNumber}" width="400" height="300"></canvas>`;
 
         stack.pop();
         parseTreeStack.pop();
         await sleep(TEMP_PARSE_SPEED);
-        console.log(stepNumber++, stack, top, currentSymbol, description);
+        // console.log(stepNumber++, stack, top, currentSymbol, description);
         temp_current_stack_div.innerHTML = `<h3>
         current <br />
         stack
@@ -460,14 +471,18 @@ async function parse(tokens) {
           .querySelector(".scroll-div")
           .scrollIntoView({ behavior: "smooth", block: "end" });
 
-        /*await visualizeParseStep(
+        await visualizeParseStep(
           stepNumber++,
           stack,
           top,
           currentSymbol,
           description,
           parseTreeRoot
-        );*/
+        ); /**/
+        temp_diagram_div.innerHTML = `<h3>Parse Tree for step ${stepNumber}</h3><canvas id="newparseTreeCanvas${stepNumber}" width="400" height="300"></canvas>`;
+
+        drawParseTree(parseTreeRoot, `newparseTreeCanvas${stepNumber}`);
+
         continue;
       }
 
@@ -491,16 +506,21 @@ async function parse(tokens) {
           stack.pop();
           parseTreeStack.pop();
           currentNode.symbol = top;
-          /*await visualizeParseStep(
+          await visualizeParseStep(
             stepNumber++,
             stack,
             top,
             currentSymbol,
             description,
             parseTreeRoot
-          );*/
+          );
+          temp_diagram_div.innerHTML = `<h3>Parse Tree for step ${stepNumber}</h3><canvas id="newparseTreeCanvas${stepNumber}" width="400" height="300"></canvas>`;
+
+          drawParseTree(parseTreeRoot, `newparseTreeCanvas${stepNumber}`);
+
+          /**/
           // await sleep(TEMP_PARSE_SPEED);
-          console.log(stepNumber++, stack, top, currentSymbol, description);
+          // console.log(stepNumber++, stack, top, currentSymbol, description);
           temp_current_stack_div.innerHTML = `<h3>
             stack <br />
             after
@@ -516,7 +536,7 @@ async function parse(tokens) {
 
           currentToken++;
         } else {
-          /*await visualizeParseStep(
+          await visualizeParseStep(
             stepNumber++,
             stack,
             top,
@@ -525,9 +545,9 @@ async function parse(tokens) {
             parseTreeRoot,
             true,
             true
-          );*/
+          ); /**/
           await sleep(TEMP_PARSE_SPEED);
-          console.log(stepNumber++, stack, top, currentSymbol, description);
+          // console.log(stepNumber++, stack, top, currentSymbol, description);
           temp_current_stack_div.innerHTML = `<h3>
             stack <br />
             after
@@ -539,7 +559,9 @@ async function parse(tokens) {
           document
             .querySelector(".scroll-div")
             .scrollIntoView({ behavior: "smooth", block: "end" });
-
+          console.error(
+            `Parsing error: Expected ${top}, got ${currentSymbol.type}`
+          );
           // Immediately throw error and stop
           throw new Error(
             `Parsing error: Expected ${top}, got ${currentSymbol.type}`
@@ -562,6 +584,8 @@ async function parse(tokens) {
             <p><span id="red-clr"> pop()</span></p>
             
           </div>`;
+          // temp_diagram_div.innerHTML = `<h3>Parse Tree for step ${stepNumber}</h3><canvas id="newparseTreeCanvas${stepNumber}" width="400" height="300"></canvas>`;
+
           await sleep(TEMP_PARSE_SPEED);
           stack.pop();
           parseTreeStack.pop();
@@ -612,7 +636,7 @@ async function parse(tokens) {
           }
 
           await sleep(TEMP_PARSE_SPEED);
-          console.log(stepNumber++, stack, top, currentSymbol);
+          // console.log(stepNumber++, stack, top, currentSymbol);
           /*
           temp_current_stack_div.innerHTML = `<h3>
             stack <br />
@@ -626,18 +650,21 @@ async function parse(tokens) {
           document
             .querySelector(".scroll-div")
             .scrollIntoView({ behavior: "smooth", block: "end" });
-
-          /*await visualizeParseStep(
+          await visualizeParseStep(
             stepNumber++,
             stack,
             top,
             currentSymbol,
             description,
             parseTreeRoot
-          );*/
+          ); /**/
+          temp_diagram_div.innerHTML = `<h3>Parse Tree for step ${stepNumber}</h3><canvas id="newparseTreeCanvas${stepNumber}" width="400" height="300"></canvas>`;
+
+          // Draw the parse tree on the canvas
+          drawParseTree(parseTreeRoot, `newparseTreeCanvas${stepNumber}`);
         } else {
           // await sleep(TEMP_PARSE_SPEED);
-          console.log(stepNumber++, stack, top, currentSymbol, description);
+          // console.log(stepNumber++, stack, top, currentSymbol, description);
           temp_current_stack_div.innerHTML = `<h3>
             stack <br />
             after
@@ -651,7 +678,7 @@ async function parse(tokens) {
             .querySelector(".scroll-div")
             .scrollIntoView({ behavior: "smooth", block: "end" });
 
-          /*await visualizeParseStep(
+          await visualizeParseStep(
             stepNumber++,
             stack,
             top,
@@ -660,11 +687,21 @@ async function parse(tokens) {
             parseTreeRoot,
             true,
             true
-          );*/
+          );
+          temp_diagram_div.innerHTML = `<h3>Parse Tree for step ${stepNumber}</h3><canvas id="newparseTreeCanvas${stepNumber}" width="400" height="300"></canvas>`;
+
+          // Draw the parse tree on the canvas
+          drawParseTree(parseTreeRoot, `newparseTreeCanvas${stepNumber}`);
+          /**/
+
+          console.error(
+            `No production in parsing table for ${top} with ${currentSymbol.type}`
+          );
           // Immediately throw error and stop
           throw new Error(
             `No production in parsing table for ${top} with ${currentSymbol.type}`
           );
+          return;
         }
       }
 

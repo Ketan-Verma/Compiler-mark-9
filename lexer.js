@@ -1,4 +1,4 @@
-const CLOCK_SPEED = 5; // 250ms between operations
+const CLOCK_SPEED = 1; // 250ms between operations
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
