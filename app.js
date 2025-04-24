@@ -10,6 +10,7 @@ compileBtn.onclick = async function () {
   // console.log(expression);
   document.querySelector(".parse-container").innerHTML = ``;
   let tokens = await lexer(expression);
-  parse(tokens);
+  let parse_tree = await parse(tokens);
+  console.log(JSON.stringify(parse_tree));
 };
 // lexer("3+5");

@@ -234,6 +234,7 @@ const parser_container = document.querySelector(".parse-container");
 //! put it inside function
 async function parse(tokens) {
   parser_container.innerHTML = "";
+
   const parser_div = document.createElement("div");
   parser_div.classList.add("parser");
 
@@ -259,7 +260,14 @@ async function parse(tokens) {
   parser_div.appendChild(current_stack_div);
   parser_div.appendChild(diagram_div);
 
+  //add Syntax Analysis message
+  const parseStartMessage = document.createElement("div");
+  parseStartMessage.classList.add("parse-start-message");
+  parseStartMessage.innerHTML = `<h2 class="main-message">Syntax Analysis</h2>`;
+  parser_container.appendChild(parseStartMessage);
+
   parser_container.appendChild(parser_div);
+
   await sleep(PARSE_SPEED);
   // ------------------------------------------------------------
   const stack = ["$", "E"];
@@ -435,8 +443,8 @@ async function parse(tokens) {
         document
           .querySelector(".scroll-div")
           .scrollIntoView({ behavior: "smooth", block: "end" });
-
-        return true;
+        // console.log(parseTreeRoot);
+        return parseTreeRoot;
       }
 
       if (top === "ε") {
@@ -730,8 +738,6 @@ class ParseTreeNode {
   constructor(symbol) {
     this.symbol = symbol;
     this.children = [];
-    this.x = 0;
-    this.y = 0;
   }
 }
 
