@@ -1,5 +1,5 @@
-const TEMP_PARSE_SPEED = 1;
-const PARSE_SPEED = 1;
+const TEMP_PARSE_SPEED = 500;
+const PARSE_SPEED = 500;
 
 // Grammar rules representation
 const GRAMMAR = {
@@ -324,6 +324,8 @@ async function parse(tokens) {
     stepNumber - 1
   }" width="400" height="300"></canvas>`;
   drawParseTree(parseTreeRoot, `newparseTreeCanvas${stepNumber - 1}`);
+  await sleep(TEMP_PARSE_SPEED);
+
   console.log("initialize stack, push $ and E");
   document
     .querySelector(".scroll-div")
@@ -422,6 +424,7 @@ async function parse(tokens) {
             
           </ul>`;
         await sleep(TEMP_PARSE_SPEED);
+
         temp_action_div.innerHTML = `
           <h3 class="step-count">Step: ${stepNumber - 1}</h3>
             <h4 class="green-clr">Parsing Done Successfully</h4>
@@ -433,6 +436,7 @@ async function parse(tokens) {
           stepNumber - 1
         }</h3><canvas id="newparseTreeCanvas${stepNumber}" width="400" height="300"></canvas>`;
         drawParseTree(parseTreeRoot, `newparseTreeCanvas${stepNumber}`);
+        await sleep(TEMP_PARSE_SPEED);
 
         let temp_div = document.createElement("div");
         temp_div.classList.add("parse-result");
@@ -490,6 +494,7 @@ async function parse(tokens) {
         temp_diagram_div.innerHTML = `<h3>Parse Tree for step ${stepNumber}</h3><canvas id="newparseTreeCanvas${stepNumber}" width="400" height="300"></canvas>`;
 
         drawParseTree(parseTreeRoot, `newparseTreeCanvas${stepNumber}`);
+        await sleep(TEMP_PARSE_SPEED);
 
         continue;
       }
@@ -497,7 +502,6 @@ async function parse(tokens) {
       if (isTerminal(top)) {
         if (matchesTerminal(top, currentSymbol)) {
           description = `Match: ${top} = ${currentSymbol.type}. Pop stack and advance input`;
-          //!
 
           // await sleep(TEMP_PARSE_SPEED);
           temp_action_div.innerHTML = `
@@ -523,8 +527,16 @@ async function parse(tokens) {
             parseTreeRoot
           );
           temp_diagram_div.innerHTML = `<h3>Parse Tree for step ${stepNumber}</h3><canvas id="newparseTreeCanvas${stepNumber}" width="400" height="300"></canvas>`;
+          //! ----------------------------------------------------------
+          if (currentNode.symbol == "NUM") {
+            currentNode.isTerminal = true; //true means terminal
+            currentNode.symbolValue = currentSymbol.value;
+            console.warn(currentNode.symbol, currentSymbol.value);
+          }
+          //! ==========================================================
 
           drawParseTree(parseTreeRoot, `newparseTreeCanvas${stepNumber}`);
+          await sleep(TEMP_PARSE_SPEED);
 
           /**/
           // await sleep(TEMP_PARSE_SPEED);
@@ -670,6 +682,7 @@ async function parse(tokens) {
 
           // Draw the parse tree on the canvas
           drawParseTree(parseTreeRoot, `newparseTreeCanvas${stepNumber}`);
+          await sleep(TEMP_PARSE_SPEED);
         } else {
           // await sleep(TEMP_PARSE_SPEED);
           // console.log(stepNumber++, stack, top, currentSymbol, description);
@@ -700,6 +713,8 @@ async function parse(tokens) {
 
           // Draw the parse tree on the canvas
           drawParseTree(parseTreeRoot, `newparseTreeCanvas${stepNumber}`);
+          await sleep(TEMP_PARSE_SPEED);
+
           /**/
 
           console.error(
@@ -735,8 +750,10 @@ async function parse(tokens) {
 
 // ParseTreeNode class
 class ParseTreeNode {
-  constructor(symbol) {
+  constructor(symbol, symbolValue, type = false) {
+    this.isTerminal = type;
     this.symbol = symbol;
+    this.symbolValue = symbolValue;
     this.children = [];
   }
 }
